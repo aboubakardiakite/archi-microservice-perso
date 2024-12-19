@@ -1,24 +1,20 @@
-package com.diakite.cardservice.entity;
+package com.diakite.accountservice.dto;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-@Entity
-public class Card {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+public class CardDTO {
+
     private Long id;
 
     private String cardNumber;
     private String cardType;
     private Long accountId;
-
-
 
     public Long getId() {
         return id;
@@ -48,8 +44,6 @@ public class Card {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-}
 
+
+}

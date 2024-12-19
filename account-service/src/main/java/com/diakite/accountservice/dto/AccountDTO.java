@@ -1,18 +1,15 @@
-package com.diakite.accountservice.entity;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.diakite.accountservice.dto;
 
 
+import lombok.*;
+
+@Getter
+@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "accounts")
-public class Account {
+public class AccountDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -20,7 +17,6 @@ public class Account {
     private String email;
 
     private Integer solde;
-
 
     public Long getId() {
         return id;
@@ -53,5 +49,6 @@ public class Account {
     public void setSolde(Integer solde) {
         this.solde = solde;
     }
+
 
 }

@@ -5,6 +5,7 @@ package com.diakite.cardservice.controller;
 import com.diakite.cardservice.entity.Card;
 import com.diakite.cardservice.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class CardController {
     }
 
     @GetMapping("/accounts/{accountId}")
-    public List<Card> getCardsByAccountId(@PathVariable Long accountId) {
-        return cardService.getCardsByAccountId(accountId);
+    public ResponseEntity<List<Card>> getCardsByAccountId(@PathVariable Long accountId) {
+        return ResponseEntity.ok(cardService.getCardsByAccountId(accountId));
     }
 
     @PostMapping("/create")

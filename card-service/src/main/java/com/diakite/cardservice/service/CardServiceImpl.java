@@ -1,5 +1,7 @@
 package com.diakite.cardservice.service;
 
+import com.diakite.cardservice.client.RestClient;
+import com.diakite.cardservice.dto.AccountDTO;
 import com.diakite.cardservice.entity.Card;
 import com.diakite.cardservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private RestClient restClient;
 
     public List<Card> getAllCards() {
         return cardRepository.findAll();
@@ -26,6 +31,12 @@ public class CardServiceImpl implements CardService {
     }
 
     public Card saveCard(Card card) {
+        AccountDTO account = restClient.getAccount(card.getAccountId());
+
+        if (account == null) {
+            throw new RuntimeException("Account not found");
+        }
+
         return cardRepository.save(card);
     }
 

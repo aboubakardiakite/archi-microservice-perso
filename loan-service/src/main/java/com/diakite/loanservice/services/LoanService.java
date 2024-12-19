@@ -11,6 +11,7 @@ public interface LoanService {
     public Loan getLoanById(Long id);
 
     public List<Loan> getLoansByAccountId(Long accountId);
+
     public Loan saveLoan(Loan loan);
 
     public void deleteLoan(Long id);

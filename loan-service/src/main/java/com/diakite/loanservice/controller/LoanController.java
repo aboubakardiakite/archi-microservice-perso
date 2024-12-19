@@ -3,6 +3,7 @@ package com.diakite.loanservice.controller;
 import com.diakite.loanservice.entity.Loan;
 import com.diakite.loanservice.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +27,11 @@ public class LoanController {
     }
 
     @GetMapping("/accounts/{accountId}")
-    public List<Loan> getLoansByAccountId(@PathVariable Long accountId) {
-        return loanService.getLoansByAccountId(accountId);
+    public ResponseEntity<List<Loan>> getLoansByAccountId(@PathVariable Long accountId) {
+        return ResponseEntity.ok(loanService.getLoansByAccountId(accountId));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Loan createLoan(@RequestBody Loan loan) {
         return loanService.saveLoan(loan);
     }
@@ -39,4 +40,6 @@ public class LoanController {
     public void deleteLoan(@PathVariable Long id) {
         loanService.deleteLoan(id);
     }
+
+
 }
