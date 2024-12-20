@@ -24,11 +24,11 @@ public class AccountKafkaLoanConsumer {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(event);
-            if("CARD_UPDATE".equals(jsonNode.get("event").asText())) {
-                logger.info("Received card update event: {}", jsonNode);
+            if("LOAN_UPDATE".equals(jsonNode.get("event").asText())) {
+                logger.info("Received loan update event: {}", jsonNode);
                 Long accountId = jsonNode.get("accountId").asLong();
                 Integer nbLoans = jsonNode.get("nbLoans").asInt();
-                logger.info("Updating card count for account: {}", accountId);
+                logger.info("Updating loan count for account: {}", accountId);
                 accountService.updateAccountNbLoan(accountId, nbLoans);
             }
         }catch (JsonProcessingException e) {

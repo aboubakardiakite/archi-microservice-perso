@@ -90,8 +90,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccountNbLoan(Long accountId, Integer nbLoan) {
         logger.info("Updating account nbLoan: {}", accountId);
-        Account account = accountRepository.findById(accountId).
-                orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository.findById(accountId).orElse(null);
         if(account != null) {
             account.setNbLoan(nbLoan);
             accountRepository.save(account);
