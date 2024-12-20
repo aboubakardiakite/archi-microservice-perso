@@ -18,4 +18,6 @@ public interface LoanService {
 
     void deleteLoanByAccountId(Long accountId);
 
+    void updateAccount(Long accountId);
+
 }

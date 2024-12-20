@@ -17,4 +17,6 @@ public interface CardService {
     public void deleteCard(Long id) ;
     void deleteCardByAccountId(Long accountId);
 
+    void updateAccount(Long accountId);
+
 }

@@ -10,6 +10,8 @@ import com.diakite.accountservice.dto.CardDTO;
 import com.diakite.accountservice.dto.InformationDTO;
 import com.diakite.accountservice.dto.LoanDTO;
 import com.diakite.accountservice.kafka.AccountKafkaProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import com.diakite.accountservice.utils.DTOMapper;
 @Service
 public class AccountServiceImpl implements AccountService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -28,6 +32,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountKafkaProducer accountKafkaProducer;
+
+
 
     @Override
     public Account createAccount(Account account) {
@@ -66,4 +72,35 @@ public class AccountServiceImpl implements AccountService {
     public Account updateAccount(Account account) {
         return accountRepository.save(account);
     }
+
+    @Override
+    public void updateAccountNbCard(Long accountId, Integer nbCard) {
+        logger.info("Updating account nbCard: {}", accountId);
+        Account account = accountRepository.findById(accountId).orElse(null);
+        if (account != null) {
+            account.setNbCard(nbCard);
+            accountRepository.save(account);
+        }else {
+            logger.error("Account not found");
+        }
+
+
+    }
+
+    @Override
+    public void updateAccountNbLoan(Long accountId, Integer nbLoan) {
+        logger.info("Updating account nbLoan: {}", accountId);
+        Account account = accountRepository.findById(accountId).
+                orElseThrow(() -> new RuntimeException("Account not found"));
+        if(account != null) {
+            account.setNbLoan(nbLoan);
+            accountRepository.save(account);
+
+        }else {
+            logger.error("Account not found");
+        }
+
+    }
+
+
 }

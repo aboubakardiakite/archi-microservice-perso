@@ -21,6 +21,25 @@ public class Account {
 
     private Integer solde;
 
+    private Integer nbCard;
+
+    private Integer nbLoan;
+
+    public Integer getNbCard() {
+        return nbCard;
+    }
+
+    public void setNbCard(Integer nbCard) {
+        this.nbCard = nbCard;
+    }
+
+    public Integer getNbLoan() {
+        return nbLoan;
+    }
+
+    public void setNbLoan(Integer nbLoan) {
+        this.nbLoan = nbLoan;
+    }
 
     public Long getId() {
         return id;

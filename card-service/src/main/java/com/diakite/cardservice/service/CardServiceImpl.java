@@ -3,6 +3,7 @@ package com.diakite.cardservice.service;
 import com.diakite.cardservice.client.RestClient;
 import com.diakite.cardservice.dto.AccountDTO;
 import com.diakite.cardservice.entity.Card;
+import com.diakite.cardservice.kafka.CardKafkaProducer;
 import com.diakite.cardservice.repository.CardRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private CardKafkaProducer cardKafkaProducer;
 
     @Autowired
     private RestClient restClient;
@@ -43,17 +47,41 @@ public class CardServiceImpl implements CardService {
             throw new RuntimeException("Account not found");
         }
 
-        return cardRepository.save(card);
+
+        Card savedCard = cardRepository.save(card);
+
+        this.updateAccount(card.getAccountId());
+
+        return savedCard;
     }
 
     public void deleteCard(Long id) {
-        cardRepository.deleteById(id);
+
+        Card card = this.getCardById(id);
+        if(card == null) {
+            throw new RuntimeException("Card not found");
+        }
+
+         cardRepository.deleteById(id);
+
+        this.updateAccount(card.getAccountId());
+
     }
+
+
 
     @Override
     public void deleteCardByAccountId(Long accountId) {
         logger.info("Deleting all cards for account: {}", accountId);
         this.cardRepository.deleteCardByAccountId(accountId);
+    }
+
+    @Override
+    public void updateAccount(Long accountId) {
+
+        Integer nbCards = this.getCardsByAccountId(accountId).size();
+
+        cardKafkaProducer.sendCardUpdateEvent(accountId, nbCards);
     }
 }
 

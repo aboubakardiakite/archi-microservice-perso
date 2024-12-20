@@ -14,4 +14,7 @@ public interface AccountService {
     List<Account> getAllAccounts();
     void deleteAccount(Long Id);
     Account updateAccount(Account account);
+    void updateAccountNbCard(Long accountId, Integer nbCard);
+    void updateAccountNbLoan(Long accountId, Integer nbLoan);
+
 }

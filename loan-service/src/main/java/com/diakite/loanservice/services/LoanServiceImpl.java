@@ -3,6 +3,7 @@ package com.diakite.loanservice.services;
 import com.diakite.loanservice.client.RestClient;
 import com.diakite.loanservice.dto.AccountDTO;
 import com.diakite.loanservice.entity.Loan;
+import com.diakite.loanservice.kafka.LoanKafkaProducer;
 import com.diakite.loanservice.repository.LoanRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -23,6 +24,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Autowired
     private RestClient restClient;
+
+    @Autowired
+    private LoanKafkaProducer loanKafkaProducer;
 
 
     public List<Loan> getAllLoans() {
@@ -47,17 +51,38 @@ public class LoanServiceImpl implements LoanService {
             throw new RuntimeException("Account not found");
         }
 
-        return loanRepository.save(loan);
+        Loan savedLoan = loanRepository.save(loan);
+
+        this.updateAccount(loan.getAccountId());
+
+        return savedLoan;
+
     }
 
     public void deleteLoan(Long id) {
+        Loan loan = this.getLoanById(id);
+
+        if(loan == null) {
+            throw new RuntimeException("Loan not found");
+        }
+
         loanRepository.deleteById(id);
+
+        this.updateAccount(loan.getAccountId());
     }
 
     @Override
     public void deleteLoanByAccountId(Long accountId) {
         logger.info("Deleting all cards for account: {}", accountId);
         this.loanRepository.deleteLoanByAccountId(accountId);
+    }
+
+    @Override
+    public void updateAccount(Long accountId) {
+
+        Integer loanCount = this.getLoansByAccountId(accountId).size();
+
+        loanKafkaProducer.sendLoanUpdateEvent(accountId, loanCount);
     }
 }
 
