@@ -9,6 +9,7 @@ import com.diakite.accountservice.dto.AccountDTO;
 import com.diakite.accountservice.dto.CardDTO;
 import com.diakite.accountservice.dto.InformationDTO;
 import com.diakite.accountservice.dto.LoanDTO;
+import com.diakite.accountservice.kafka.AccountKafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private RestClient restClient;
+
+    @Autowired
+    private AccountKafkaProducer accountKafkaProducer;
 
     @Override
     public Account createAccount(Account account) {
@@ -54,6 +58,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteAccount(Long accountId) {
+        accountKafkaProducer.sendAccountDeleteEvent(accountId);
         accountRepository.deleteById(Long.valueOf(accountId));
     }
 

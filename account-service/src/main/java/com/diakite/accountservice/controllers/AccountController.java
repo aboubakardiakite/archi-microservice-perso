@@ -39,6 +39,11 @@ public class AccountController {
         return accountService.createAccount(account);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void deleteAccount(@PathVariable Long id) {
+        accountService.deleteAccount(id);
+    }
+
 
 
     

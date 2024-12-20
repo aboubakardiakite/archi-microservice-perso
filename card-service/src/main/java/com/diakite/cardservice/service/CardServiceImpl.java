@@ -4,13 +4,19 @@ import com.diakite.cardservice.client.RestClient;
 import com.diakite.cardservice.dto.AccountDTO;
 import com.diakite.cardservice.entity.Card;
 import com.diakite.cardservice.repository.CardRepository;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class CardServiceImpl implements CardService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);
 
     @Autowired
     private CardRepository cardRepository;
@@ -42,6 +48,12 @@ public class CardServiceImpl implements CardService {
 
     public void deleteCard(Long id) {
         cardRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteCardByAccountId(Long accountId) {
+        logger.info("Deleting all cards for account: {}", accountId);
+        this.cardRepository.deleteCardByAccountId(accountId);
     }
 }
 

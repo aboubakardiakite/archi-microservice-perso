@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/archi.iml" filepath="$PROJECT_DIR$/.idea/archi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/archi-microservice-perso.iml" filepath="$PROJECT_DIR$/.idea/archi-microservice-perso.iml" />
     </modules>
   </component>
 </project>

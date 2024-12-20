@@ -4,13 +4,19 @@ import com.diakite.loanservice.client.RestClient;
 import com.diakite.loanservice.dto.AccountDTO;
 import com.diakite.loanservice.entity.Loan;
 import com.diakite.loanservice.repository.LoanRepository;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class LoanServiceImpl implements LoanService {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
 
     @Autowired
     private LoanRepository loanRepository;
@@ -32,6 +38,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @Transactional
     public Loan saveLoan(Loan loan) {
 
         AccountDTO account = restClient.getAccount(loan.getAccountId());
@@ -45,6 +52,12 @@ public class LoanServiceImpl implements LoanService {
 
     public void deleteLoan(Long id) {
         loanRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteLoanByAccountId(Long accountId) {
+        logger.info("Deleting all cards for account: {}", accountId);
+        this.loanRepository.deleteLoanByAccountId(accountId);
     }
 }
 
